@@ -1,14 +1,14 @@
 %% Clean environment
-clear all;
-close;
+close all;
+clear;
 clc;
 
 %% Initialize
 N = 20;
-qs = linspace(0, 2*pi, N)';
+qs = linspace(0, 2*pi, N);
 ws = 1 + 2.*randn(N, 1);
 
-K = 10;
+K = 1;
 r = 1;
 
 kur = kuram(qs, ws, K, r);
@@ -18,11 +18,10 @@ figure;
 kur.plotfreq();
 
 figure;
-subplot(2, 1, 1);
 kur.plot();
 
+figure;
 for i = 1:100
     kur.update(0.01);
+    kur.plot();
 end
-subplot(2, 1, 2);
-kur.plot();

@@ -5,14 +5,19 @@ classdef kuram < handle
     properties(GetAccess = public, SetAccess = private)
         qs;
         ws;
+        
+        K;
+        r;
     end
     
     methods(Access = public)
-        function obj = kuram(qsIn, wsIn)
+        function obj = kuram(qsIn, wsIn, Kin, rin)
             %KURAM Construct an instance of this class
             %   Detailed explanation goes here
             obj.qs = qsIn;
             obj.ws = wsIn;
+            obj.K = Kin;
+            obj.r = rin;
         end
         
         function n = N(obj)
@@ -20,16 +25,17 @@ classdef kuram < handle
             n = numel(obj.qs(:));
         end
         
-        function [z, r, psi] = orderparameter(obj)
+        function [z, len, psi] = orderparameter(obj)
             %ORDERPARAMETER returns the order parameter
             z = 1/obj.N().*sum(exp(1i.*obj.qs));
-            r = abs(z);
+            len = abs(z);
             psi = angle(z);
         end
         
         function update(obj, tStep)
+            %UPDATE updates the state of the oscillator
             [~, ~, psi] = obj.orderparameter();
-            dqs = (obj.ws + sin(psi - obj.qs)).*tStep;
+            dqs = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs)).*tStep;
             
             qs_old = obj.qs;
             qs_new = qs_old + dqs;

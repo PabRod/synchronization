@@ -60,29 +60,3 @@ plot(ts, abs(zs), 'Color', 'r');
 xlim([0, tEnd]);
 ylim([0, 1]);
 title('Order parameter length');
-
-%% For animations
-% kur = kuram(qs, ws, K, r);
-% figure;
-% tStep = 0.01;
-% tEnd = 2;
-% for ts = 0:tStep:tEnd
-%     subplot(2, 2, 1);
-%     kur.plot();
-%     hold on;
-%     kur.plotop();
-%     hold off;
-%     
-%     subplot(2, 2, 2);
-%     kur.plotfreq();
-%     
-%     subplot(2, 2, [3,4]);
-%     [~, len, ~] = kur.orderparameter();
-%     hold on;
-%     scatter(ts, len, [], [255 0 0]./255, '.');
-%     hold off;
-%     xlim([0, tEnd]);
-%     ylim([0, 1]);
-%     
-%     kur.update(tStep);
-% end

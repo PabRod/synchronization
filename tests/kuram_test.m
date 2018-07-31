@@ -83,3 +83,21 @@ try
 catch
     assert(false);
 end
+
+%% Plot order parameter
+N = 50;
+qs = linspace(0, 2*pi, N);
+ws = 1 + 2.*randn(N, 1);
+
+K = 1;
+r = 1;
+
+try
+    kur = kuram(qs, ws, K, r);
+    
+    kur.plotop();
+    close all;
+    assert(true);
+catch
+    assert(false);
+end

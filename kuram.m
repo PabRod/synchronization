@@ -33,7 +33,7 @@ classdef kuram < handle
             %ORDERPARAMETER returns the order parameter
             
             % The order parameter is a complex number
-            z = 1/obj.N().*sum(exp(1i.*obj.qs));
+            z = mean(exp(1i.*obj.qs));
             
             % The length and phase are relevant individually
             len = abs(z);
@@ -63,6 +63,19 @@ classdef kuram < handle
             xlim([-1 1]);
             ylim([-1 1]);
         end
+        
+        function plotop(obj)
+            %PLOTOP Plots the order parameter
+            %   Detailed explanation goes here
+            z = obj.orderparameter();
+            x = real(z);
+            y = imag(z);
+            
+            scatter(x, y, 'filled');
+            xlim([-1 1]);
+            ylim([-1 1]);
+        end
+            
         
         function plotfreq(obj)
             %PLOTFREQ plots the frequencies distribution

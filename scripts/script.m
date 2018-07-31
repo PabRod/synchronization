@@ -6,9 +6,10 @@ clc;
 %% Initialize
 N = 20;
 qs = linspace(0, 2*pi, N);
-ws = 1 + 2.*randn(N, 1);
+% ws = 1 + 2.*randn(N, 1);
+ws = 1;
 
-K = 1;
+K = 0;
 r = 1;
 
 kur = kuram(qs, ws, K, r);

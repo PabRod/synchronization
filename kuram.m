@@ -1,6 +1,12 @@
 classdef kuram < handle
     %KURAM Kuramoto model
-    %   Detailed explanation goes here
+    %   Based on Strogatz SH. From Kuramoto to Crawford: 
+    % exploring the onset of synchronization in populations of coupled oscillators. 
+    % Phys D Nonlinear Phenom. 2000;143(1):1–20. 
+    %
+    % Pablo Rodríguez-Sánchez
+    % Wageningen University and Research 
+    % https://pabrod.github.io
     
     properties(GetAccess = public, SetAccess = private)
         qs; % Vector of phases
@@ -11,6 +17,7 @@ classdef kuram < handle
     end
     
     methods(Access = public)
+        
         function obj = kuram(qsIn, wsIn, Kin, rin)
             %KURAM Construct an instance of this class
             %   Detailed explanation goes here
@@ -46,7 +53,7 @@ classdef kuram < handle
             % The coupling happens via the order parameter
             [~, ~, psi] = obj.orderparameter();
             
-            % Compute the increment using the Euler method
+            % The effective frequency is built with the Kuramoto diff. eq.
             w = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs));
         end
         
@@ -61,7 +68,9 @@ classdef kuram < handle
         end
         
         function [qs, zs, weffs] = sim(obj, ts)
-            %SIM simulate dynamics
+            %SIM simulate dynamics and store results
+            %   Oscillators as rows
+            %   Times as columns
             
             % Initialize
             qs = NaN(obj.N(), numel(ts));
@@ -89,7 +98,7 @@ classdef kuram < handle
         
         function plot(obj)
             %PLOT Plots the current state
-            %   Detailed explanation goes here
+
             xs = cos(obj.qs);
             ys = sin(obj.qs);
             
@@ -100,7 +109,7 @@ classdef kuram < handle
         
         function plotop(obj)
             %PLOTOP Plots the order parameter
-            %   Detailed explanation goes here
+
             z = obj.orderparameter();
             x = real(z);
             y = imag(z);
@@ -109,16 +118,17 @@ classdef kuram < handle
             xlim([-1 1]);
             ylim([-1 1]);
         end
-            
         
         function plotfreq(obj)
             %PLOTFREQ plots the frequencies distribution
+            
             histogram(obj.ws, 'Normalization', 'probability');
             hold on;
             histogram(obj.weff(), 'Normalization','probability');
             hold off;
             ylim([0,1]);
         end
+        
     end
 end
 

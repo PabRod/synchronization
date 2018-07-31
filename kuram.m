@@ -4,7 +4,7 @@ classdef kuram < handle
     
     properties(GetAccess = public, SetAccess = private)
         qs; % Vector of phases
-        ws; % Vector of frequencies
+        ws; % Vector of initial frequencies
         
         K; % Coupling factors
         r;
@@ -40,14 +40,21 @@ classdef kuram < handle
             psi = angle(z);
         end
         
-        function update(obj, tStep)
-            %UPDATE updates the state of the oscillator
+        function w = weff(obj)
+            %WEFF returns the effective frequency
             
             % The coupling happens via the order parameter
             [~, ~, psi] = obj.orderparameter();
             
             % Compute the increment using the Euler method
-            dqs = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs)).*tStep;
+            w = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs));
+        end
+        
+        function update(obj, tStep)
+            %UPDATE updates the state of the oscillator
+            
+            % Compute the increment using the Euler method
+            dqs = obj.weff().*tStep;
             
             % Apply the increment
             obj.qs = obj.qs + dqs;
@@ -80,6 +87,9 @@ classdef kuram < handle
         function plotfreq(obj)
             %PLOTFREQ plots the frequencies distribution
             hist(obj.ws);
+            hold on;
+            hist(obj.weff());
+            hold off;
         end
     end
 end

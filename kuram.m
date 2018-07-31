@@ -2,7 +2,7 @@ classdef kuram < handle
     %KURAM Kuramoto model
     %   Based on Strogatz SH. From Kuramoto to Crawford: 
     % exploring the onset of synchronization in populations of coupled oscillators. 
-    % Phys D Nonlinear Phenom. 2000;143(1):1–20. 
+    % Phys D Nonlinear Phenom. 2000;143(1):1–20. https://doi.org/10.1016/S0167-2789(00)00094-4
     %
     % Pablo Rodríguez-Sánchez
     % Wageningen University and Research 
@@ -18,6 +18,7 @@ classdef kuram < handle
     
     methods(Access = public)
         
+        %% Constructor
         function obj = kuram(qsIn, wsIn, Kin, rin)
             %KURAM Construct an instance of this class
             %   Detailed explanation goes here
@@ -31,6 +32,7 @@ classdef kuram < handle
             obj.r = rin;
         end
         
+        %% Calculations
         function n = N(obj)
             %N Returns the number of oscillators
             n = numel(obj.qs(:));
@@ -57,6 +59,7 @@ classdef kuram < handle
             w = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs));
         end
         
+        %% Simulation
         function update(obj, tStep)
             %UPDATE updates the state of the oscillator
             
@@ -69,6 +72,9 @@ classdef kuram < handle
         
         function [qs, zs, weffs] = sim(obj, ts)
             %SIM simulate dynamics and store results
+            %
+            %   Returns states, order parameters and effective frequencies
+            %
             %   Oscillators as rows
             %   Times as columns
             
@@ -96,6 +102,7 @@ classdef kuram < handle
             
         end
         
+        %% Plotting
         function plot(obj)
             %PLOT Plots the current state
 

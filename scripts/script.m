@@ -4,18 +4,18 @@ clear;
 clc;
 
 %% Initialize
-N = 200;
+N = 3000;
 qs = linspace(0, 2*pi, N);
 ws = 1 + 2.*randn(N, 1);
 
-K = 3;
+K = 4;
 r = 1;
 
 kur = kuram(qs, ws, K, r);
 
 %% Simulate
 tStep = 0.01;
-tEnd = 2;
+tEnd = 3;
 ts = 0:tStep:tEnd;
 
 [qs, zs, weffs] = kur.sim(ts);
@@ -33,6 +33,8 @@ scatter(x, y, 'filled');
 hold off;
 xlim([-1 1]);
 ylim([-1 1]);
+title('States and centroid');
+%legend({'States', 'Order parameter'});
 
 subplot(2, 2, 2);
 histogram(kur.ws, 'Normalization', 'probability');
@@ -40,11 +42,21 @@ hold on;
 histogram(weffs(:,end), 'Normalization', 'probability');
 hold off;
 ylim([0 1]);
+title('Initial and effective frequencies');
 
-subplot(2, 2, [3,4]);
+subplot(2, 2, 3);
+xs = real(zs);
+ys = imag(zs);
+plot(xs, ys, 'Color', 'r');
+xlim([-1, 1]);
+ylim([-1, 1]);
+title('Order parameter');
+
+subplot(2, 2, 4);
 plot(ts, abs(zs), 'Color', 'r');
 xlim([0, tEnd]);
 ylim([0, 1]);
+title('Order parameter length');
 
 %% For animations
 % kur = kuram(qs, ws, K, r);

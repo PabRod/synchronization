@@ -86,9 +86,9 @@ classdef kuram < handle
         
         function plotfreq(obj)
             %PLOTFREQ plots the frequencies distribution
-            hist(obj.ws);
+            histogram(obj.ws, 'Normalization', 'probability');
             hold on;
-            hist(obj.weff());
+            histogram(obj.weff(), 'Normalization','probability');
             hold off;
         end
     end

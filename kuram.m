@@ -116,7 +116,7 @@ classdef kuram < handle
         
         function plotop(obj)
             %PLOTOP Plots the order parameter
-
+            
             z = obj.orderparameter();
             x = real(z);
             y = imag(z);
@@ -134,6 +134,71 @@ classdef kuram < handle
             histogram(obj.weff(), 'Normalization','probability');
             hold off;
             ylim([0,1]);
+        end
+        
+        function F = animate(obj, ts, varargin)
+            %ANIMATE generates an animated summary plot
+            %
+            % ts: times
+            % varargin{1}: filename (.gif)
+            
+            [qst, zs, weffs] = sim(obj, ts);
+            F = cell(1, numel(ts));
+            figure;
+            for j = 1:numel(ts)
+                
+                subplot(2, 2, 1);
+                aux = kuram(qst(:,j), obj.ws, obj.K, obj.r);
+                aux.plot();
+                hold on;
+                aux.plotop();
+                hold off;
+                title('States and centroid');
+                xlabel('cos \theta');
+                ylabel('sin \theta');
+                
+                subplot(2, 2, 2);
+                aux.plotfreq();
+                xlim([min(weffs(:)), max(weffs(:))]);
+                title('Initial and effective frequencies');
+                xlabel('\omega');
+                ylabel('Frequency distribution');
+                
+                subplot(2, 2, 3);
+                xs = real(zs(1:j));
+                ys = imag(zs(1:j));
+                plot(xs, ys, 'Color', 'r');
+                xlim([-1, 1]);
+                ylim([-1, 1]);
+                title('Order parameter');
+                xlabel('\Re z');
+                ylabel('\Im z');
+                
+                subplot(2, 2, 4);
+                plot(ts(1:j), abs(zs(1:j)), 'Color', 'r');
+                xlim([0, ts(end)]);
+                ylim([0, 1]);
+                title('Order parameter length');
+                xlabel('t');
+                ylabel('\mid z \mid');
+                
+                F{j} = getframe(gcf);
+                
+                im = frame2im(F{j});
+                
+                % Export to file
+                if nargin == 3
+                    filename = varargin{1};
+                    [imind,cm] = rgb2ind(im, 256);
+                    
+                    % Write to the GIF File
+                    if j == 1
+                        imwrite(imind, cm, filename, 'gif', 'Loopcount', inf);
+                    else
+                        imwrite(imind, cm, filename, 'gif', 'WriteMode', 'append');
+                    end
+                end
+            end
         end
         
     end

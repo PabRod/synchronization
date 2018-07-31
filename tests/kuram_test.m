@@ -140,3 +140,23 @@ try
 catch
     assert(false);
 end
+
+%% Animation
+N = 50;
+qs = linspace(0, 2*pi, N);
+ws = 1 + 2.*randn(N, 1);
+
+K = 1;
+r = 1;
+
+ts = 0:0.01:0.05;
+
+try
+    kur = kuram(qs, ws, K, r);
+    
+    kur.animate(ts);
+    close all;
+    assert(true);
+catch
+    assert(false);
+end

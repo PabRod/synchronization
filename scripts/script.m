@@ -4,20 +4,23 @@ clear;
 clc;
 
 %% Initialize
-N = 3000;
+N = 100;
 qs = linspace(0, 2*pi, N);
-ws = 1 + 2.*randn(N, 1);
+ws = 5 + 2.*randn(N, 1);
 
-K = 4;
+K = 7;
 r = 1;
 
 kur = kuram(qs, ws, K, r);
 
 %% Simulate
 tStep = 0.01;
-tEnd = 3;
+tEnd = 1;
 ts = 0:tStep:tEnd;
 
+F = kur.animate(ts, '..\figs\animation.gif');
+
+%%
 [qs, zs, weffs] = kur.sim(ts);
 
 %% Plot

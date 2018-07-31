@@ -14,7 +14,7 @@ r = 1;
 kur = kuram(qs, ws, K, r);
 
 %% Simulate
-tStep = 0.01;
+tStep = 0.025;
 tEnd = 1;
 ts = 0:tStep:tEnd;
 

@@ -60,6 +60,33 @@ classdef kuram < handle
             obj.qs = obj.qs + dqs;
         end
         
+        function [qs, zs, weffs] = sim(obj, ts)
+            %SIM simulate dynamics
+            
+            % Initialize
+            qs = NaN(obj.N(), numel(ts));
+            zs = NaN(1, numel(ts));
+            weffs = NaN(obj.N(), numel(ts));
+            
+            % Compute for initial state
+            qs(:, 1) = obj.qs;
+            zs(1) = obj.orderparameter();
+            weffs(:, 1) = obj.weff();
+            
+            % Compute for future times
+            for i = 2:numel(ts)
+                % Update state
+                tStep = ts(i)-ts(i-1);
+                obj.update(tStep);
+                
+                % Extract information
+                qs(:, i) = obj.qs;
+                zs(i) = obj.orderparameter();
+                weffs(:, i) = obj.weff();
+            end
+            
+        end
+        
         function plot(obj)
             %PLOT Plots the current state
             %   Detailed explanation goes here
@@ -90,6 +117,7 @@ classdef kuram < handle
             hold on;
             histogram(obj.weff(), 'Normalization','probability');
             hold off;
+            ylim([0,1]);
         end
     end
 end

@@ -60,11 +60,30 @@ classdef kuram < handle
         end
         
         %% Simulation
-        function update(obj, tStep)
+        function update(obj, tStep, algorithm)
             %UPDATE updates the state of the oscillator
             
-            % Compute the increment using the Euler method
-            dqs = obj.weff().*tStep;
+            if nargin == 2
+                algorithm = 'Heun';
+            end
+            
+            switch algorithm
+                case 'Euler'
+                    % Compute the increment using the Euler's method
+                    dqs = obj.weff().*tStep;
+                case 'Heun'
+                    % Compute the increment using the Heun's method
+                    dqs_euler = obj.weff().*tStep;
+                    
+                    % The second estimator looks tricky...
+                    [~, ~, psi] = obj.orderparameter();
+                    dqs_heun = (obj.ws + obj.K.*obj.r.*sin(psi - obj.qs - dqs_euler)).*tStep;
+                    %... but it is just obj.weff().*tStep where the
+                    % effective frequency is calculated at qs + dqs_euler
+                    
+                    % We take the average of both estimators
+                    dqs = (dqs_euler + dqs_heun)./2;                    
+            end
             
             % Apply the increment
             obj.qs = obj.qs + dqs;
